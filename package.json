@@ -1,5 +1,5 @@
 {
-  "name": "webeb-spake2-js",
+  "name": "web-spake2-js",
   "version": "1.0.0",
   "description": "A Javascript package for SPAKE2 and SPAKE2+ for web",
   "type": "module",

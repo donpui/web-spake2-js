@@ -1,6 +1,6 @@
 # SPAKE2-JS Usage Guide
 
-This guide walks through the practical steps for using `@niomon/spake2` to run SPAKE2 and SPAKE2+ exchanges in Node.js applications. It complements the brief README with concrete instructions, code snippets, and option details.
+This guide walks through the practical steps for using `web-spake2-js` to run SPAKE2 and SPAKE2+ exchanges in Node.js applications. It complements the brief README with concrete instructions, code snippets, and option details.
 
 > ⚠️ **Security note**  
 > This library has not been audited by cryptographers, and many operations are not constant time. Deploy only after a thorough review tailored to your threat model.
@@ -10,9 +10,9 @@ This guide walks through the practical steps for using `@niomon/spake2` to run S
 ## 1. Installation and Runtime
 
 ```bash
-npm install @niomon/spake2
+npm install web-spake2-js
 # or
-yarn add @niomon/spake2
+yarn add web-spake2-js
 ```
 
 The test suite is exercised on Node.js 18+; Node.js 22 works as well. Ensure you run on a modern Node.js release with the built-in `crypto` module available.
@@ -21,10 +21,10 @@ The test suite is exercised on Node.js 18+; Node.js 22 works as well. Ensure you
 
 ```js
 // CommonJS
-const { spake2, spake2Plus } = require('@niomon/spake2')
+const { spake2, spake2Plus } = require('web-spake2-js')
 
 // ESM / bundlers
-import { spake2, spake2Plus } from '@niomon/spake2'
+import { spake2, spake2Plus } from 'web-spake2-js'
 ```
 
 All byte-oriented APIs return `Uint8Array` values. In Node.js you can call the provided `.toBuffer()` helpers (or wrap with `Buffer.from(...)`) for compatibility, while browsers can consume the `Uint8Array` instances directly.
@@ -72,7 +72,7 @@ If you omit `length`, the library derives the required lengths automatically bas
 The balanced protocol assumes both sides share the password. Typical flow:
 
 ```js
-const spake2 = require('@niomon/spake2')
+const spake2 = require('web-spake2-js')
 
 const options = {
   suite: 'P256-SHA256-HKDF-SHA256-HMAC-SHA256',
