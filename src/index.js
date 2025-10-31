@@ -1,16 +1,15 @@
-const BN = require('bn.js')
+import BN from 'bn.js'
 
-const { cipherSuites } = require('./lib/cipher-suites.js')
-const { randomInteger } = require('./lib/random.js')
-const {
+import { cipherSuites } from './lib/cipher-suites.js'
+import { randomInteger } from './lib/random.js'
+import {
   toBytes,
-  concatBytes,
   concatLengthPrefixed,
   equalBytes,
   toHex,
   fromHex,
   bufferFrom
-} = require('./lib/bytes.js')
+} from './lib/bytes.js'
 
 function encodeScalar (scalar, length) {
   return scalar.toArrayLike(Uint8Array, 'be', length)
@@ -120,14 +119,14 @@ class SPAKE2 {
     const { cipherSuite } = this
     if (!this.options.plus) {
       const w = await this._computeW(password, salt)
-      return bufferFrom(encodeScalar(w, cipherSuite.scalarLength))
+      return encodeScalar(w, cipherSuite.scalarLength)
     }
 
     const { w0, w1 } = await this._computeW0W1(clientIdentity, serverIdentity, password, salt)
     const L = cipherSuite.curve.P.mul(w1)
     return {
-      w0: bufferFrom(encodeScalar(w0, cipherSuite.scalarLength)),
-      L: bufferFrom(cipherSuite.curve.encodePoint(L))
+      w0: encodeScalar(w0, cipherSuite.scalarLength),
+      L: cipherSuite.curve.encodePoint(L)
     }
   }
 
@@ -705,9 +704,24 @@ function spake2Factory (options = {}, plus = false) {
   return new SPAKE2(options, cipherSuite)
 }
 
-module.exports = {
-  spake2: options => spake2Factory(options, false),
-  spake2Plus: options => spake2Factory(options, true),
+const spake2 = options => spake2Factory(options, false)
+const spake2Plus = options => spake2Factory(options, true)
+
+export {
+  spake2,
+  spake2Plus,
+  SPAKE2,
+  ClientSPAKE2State,
+  ServerSPAKE2State,
+  ClientSPAKE2PlusState,
+  ServerSPAKE2PlusState,
+  ClientSharedSecret,
+  ServerSharedSecret
+}
+
+export default {
+  spake2,
+  spake2Plus,
   SPAKE2,
   ClientSPAKE2State,
   ServerSPAKE2State,

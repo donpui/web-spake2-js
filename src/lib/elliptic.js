@@ -1,6 +1,8 @@
-const BN = require('bn.js')
-const EC = require('elliptic').ec
-const { toBytes, fromHex } = require('./bytes.js')
+import BN from 'bn.js'
+import elliptic from 'elliptic'
+import { toBytes, fromHex } from './bytes.js'
+
+const { ec: EC } = elliptic
 
 function bnFromLittleEndian (bytes) {
   let hex = ''
@@ -114,7 +116,4 @@ class Elliptic {
   }
 }
 
-module.exports = {
-  CURVES,
-  Elliptic
-}
+export { CURVES, Elliptic }

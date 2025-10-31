@@ -1,10 +1,11 @@
-const hashJs = require('hash.js')
-const { toBytes, bufferFrom } = require('./bytes.js')
+import hashJs from 'hash.js'
+import { toBytes, bufferFrom } from './bytes.js'
 
 let nodeCreateHash
 try {
-  ({ createHash: nodeCreateHash } = require('crypto'))
-} catch (error) {
+  const cryptoModule = await import('crypto')
+  nodeCreateHash = cryptoModule.createHash
+} catch {
   nodeCreateHash = undefined
 }
 
@@ -14,7 +15,7 @@ try {
  * @param {Buffer} content The content to be hashed.
  * @returns {Buffer} The hashed content.
  */
-function sha256 (content) {
+export function sha256 (content) {
   const input = toBytes(content)
   if (nodeCreateHash) {
     const digest = nodeCreateHash('sha256').update(bufferFrom(input)).digest()
@@ -29,7 +30,7 @@ function sha256 (content) {
  * @param {Buffer} content The content to be hashed.
  * @returns {Buffer} The hashed content.
  */
-function sha512 (content) {
+export function sha512 (content) {
   const input = toBytes(content)
   if (nodeCreateHash) {
     const digest = nodeCreateHash('sha512').update(bufferFrom(input)).digest()
@@ -37,6 +38,3 @@ function sha512 (content) {
   }
   return Uint8Array.from(hashJs.sha512().update(input).digest())
 }
-
-exports.sha256 = sha256
-exports.sha512 = sha512

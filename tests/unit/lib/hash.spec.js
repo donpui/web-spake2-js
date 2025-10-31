@@ -1,7 +1,8 @@
 /* global describe, it */
-const assert = require('assert')
+import assert from 'assert'
+import { Buffer } from 'buffer'
 
-const { sha256 } = require('../../../src/lib/hash.js')
+import { sha256 } from '../../../src/lib/hash.js'
 
 const testCases = [{
   content: Buffer.from('input'),

@@ -1,7 +1,8 @@
 /* global describe, it */
-const assert = require('assert')
+import assert from 'assert'
+import { Buffer } from 'buffer'
 
-const { scrypt } = require('../../../src/lib/mhf.js')
+import { scrypt } from '../../../src/lib/mhf.js'
 
 const testCases = [{
   password: Buffer.from(''),

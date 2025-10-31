@@ -1,5 +1,6 @@
-const scryptModule = require('scrypt-js')
-const { toBytes } = require('./bytes.js')
+import scryptModule from 'scrypt-js'
+import { toBytes } from './bytes.js'
+
 const scryptFunc = typeof scryptModule === 'function'
   ? scryptModule
   : (typeof scryptModule?.scrypt === 'function' ? scryptModule.scrypt : scryptModule?.default)
@@ -20,7 +21,7 @@ const scryptFunc = typeof scryptModule === 'function'
  * // returns <Buffer fd ba be 1c 9d 34 72 00 78 56 ...>
  * @returns {Promise<Buffer>} The hash value.
  */
-function scrypt (passphrase, salt, options = {}) {
+export function scrypt (passphrase, salt, options = {}) {
   const { n, r, p, length } = options
   const dkLen = length !== undefined ? length : 32
   const passBytes = toBytes(passphrase)
@@ -64,5 +65,3 @@ function scrypt (passphrase, salt, options = {}) {
     }
   })
 }
-
-exports.scrypt = scrypt

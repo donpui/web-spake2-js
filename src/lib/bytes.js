@@ -1,37 +1,39 @@
-let TextEncoderCtor = typeof TextEncoder !== 'undefined' ? TextEncoder : undefined
-let TextDecoderCtor = typeof TextDecoder !== 'undefined' ? TextDecoder : undefined
+import { Buffer } from 'buffer'
+
+let TextEncoderCtor = typeof globalThis !== 'undefined' ? globalThis.TextEncoder : undefined
+let TextDecoderCtor = typeof globalThis !== 'undefined' ? globalThis.TextDecoder : undefined
 
 try {
   if (!TextEncoderCtor || !TextDecoderCtor) {
-    const util = require('util')
+    const util = await import('util')
     TextEncoderCtor = TextEncoderCtor || util.TextEncoder
     TextDecoderCtor = TextDecoderCtor || util.TextDecoder
   }
-} catch (error) {
-  // util not available (e.g. browser without modules) – handled below
+} catch {
+  // util module not available (e.g. in browser) – ignore
 }
 
 const encoder = TextEncoderCtor ? new TextEncoderCtor() : null
 const decoder = TextDecoderCtor ? new TextDecoderCtor() : null
 
-function isBuffer (value) {
-  return typeof Buffer !== 'undefined' && Buffer.isBuffer && Buffer.isBuffer(value)
+function hasBuffer () {
+  return typeof Buffer !== 'undefined'
 }
 
-function toBytes (value) {
+export function toBytes (value) {
   if (value instanceof Uint8Array) return value
   if (value instanceof ArrayBuffer) return new Uint8Array(value)
   if (Array.isArray(value)) return Uint8Array.from(value)
-  if (isBuffer(value)) return new Uint8Array(value)
+  if (hasBuffer() && Buffer.isBuffer && Buffer.isBuffer(value)) return new Uint8Array(value)
   if (value === undefined || value === null) return new Uint8Array(0)
   if (typeof value === 'string') {
     if (encoder) return encoder.encode(value)
-    if (typeof Buffer !== 'undefined') return new Uint8Array(Buffer.from(value, 'utf8'))
+    if (hasBuffer()) return new Uint8Array(Buffer.from(value, 'utf8'))
   }
   return Uint8Array.from(value)
 }
 
-function concatBytes (...arrays) {
+export function concatBytes (...arrays) {
   const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0)
   const out = new Uint8Array(totalLength)
   let offset = 0
@@ -52,7 +54,7 @@ function encodeLengthLE (length) {
   return out
 }
 
-function concatLengthPrefixed (...values) {
+export function concatLengthPrefixed (...values) {
   const pieces = []
   for (const value of values) {
     const bytes = toBytes(value)
@@ -63,7 +65,7 @@ function concatLengthPrefixed (...values) {
   return concatBytes(...pieces)
 }
 
-function equalBytes (a, b) {
+export function equalBytes (a, b) {
   const aa = toBytes(a)
   const bb = toBytes(b)
   if (aa.length !== bb.length) return false
@@ -74,17 +76,16 @@ function equalBytes (a, b) {
   return diff === 0
 }
 
-function toHex (bytes) {
+export function toHex (bytes) {
   const arr = toBytes(bytes)
   let out = ''
   for (let i = 0; i < arr.length; i++) {
-    const hex = arr[i].toString(16).padStart(2, '0')
-    out += hex
+    out += arr[i].toString(16).padStart(2, '0')
   }
   return out
 }
 
-function fromHex (hex) {
+export function fromHex (hex) {
   const normalized = hex.trim().toLowerCase()
   const out = new Uint8Array(normalized.length / 2)
   for (let i = 0; i < out.length; i++) {
@@ -93,26 +94,15 @@ function fromHex (hex) {
   return out
 }
 
-function bufferFrom (bytes) {
+export function bufferFrom (bytes) {
   const arr = toBytes(bytes)
-  if (typeof Buffer !== 'undefined') return Buffer.from(arr)
+  if (hasBuffer()) return Buffer.from(arr)
   return Uint8Array.from(arr)
 }
 
-function bytesToString (bytes) {
+export function bytesToString (bytes) {
   const arr = toBytes(bytes)
   if (decoder) return decoder.decode(arr)
-  if (typeof Buffer !== 'undefined') return Buffer.from(arr).toString('utf8')
+  if (hasBuffer()) return Buffer.from(arr).toString('utf8')
   throw new Error('TextDecoder is not available in this environment')
-}
-
-module.exports = {
-  toBytes,
-  concatBytes,
-  concatLengthPrefixed,
-  equalBytes,
-  toHex,
-  fromHex,
-  bufferFrom,
-  bytesToString
 }

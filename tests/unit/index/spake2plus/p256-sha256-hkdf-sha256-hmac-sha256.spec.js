@@ -1,7 +1,11 @@
 /* global describe, it */
-const assert = require('assert')
+import assert from 'assert'
+import { Buffer } from 'buffer'
 
-const spake2js = require('../../../../src')
+import {
+  ClientSPAKE2PlusState,
+  ServerSPAKE2PlusState
+} from '../../../../src/index.js'
 
 function toHex (bytes) {
   return Buffer.from(bytes).toString('hex')
@@ -39,7 +43,7 @@ describe('SPAKE2+ (P-256 test vector)', function () {
   it('matches the published RFC 9383 vector', function () {
     const options = { suite, plus: true, kdf: { AAD: '' }, context }
 
-    const clientState = spake2js.ClientSPAKE2PlusState.load({
+    const clientState = ClientSPAKE2PlusState.load({
       options,
       x: vector.x,
       w0: vector.w0,
@@ -48,7 +52,7 @@ describe('SPAKE2+ (P-256 test vector)', function () {
       serverIdentity
     })
 
-    const serverState = spake2js.ServerSPAKE2PlusState.load({
+    const serverState = ServerSPAKE2PlusState.load({
       options,
       y: vector.y,
       w0: vector.w0,

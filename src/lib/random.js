@@ -1,10 +1,10 @@
-const BN = require('bn.js')
-const { toHex } = require('./bytes.js')
+import BN from 'bn.js'
+import { toHex } from './bytes.js'
 
 let nodeCrypto
 try {
-  nodeCrypto = require('crypto')
-} catch (error) {
+  nodeCrypto = await import('crypto')
+} catch {
   nodeCrypto = undefined
 }
 
@@ -31,11 +31,9 @@ function randomBytes (size) {
  * @param {BN} r The upper bound of the random number.
  * @returns {BN} A cryptographically-random integer.
  */
-function randomInteger (l, r) {
+export function randomInteger (l, r) {
   const range = r.sub(l)
   const size = Math.ceil(range.sub(new BN(1)).toString(16).length / 2)
   const v = new BN(toHex(randomBytes(size + 8)), 16)
   return v.mod(range).add(l)
 }
-
-exports.randomInteger = randomInteger

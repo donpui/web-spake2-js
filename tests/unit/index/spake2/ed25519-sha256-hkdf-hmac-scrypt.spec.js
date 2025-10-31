@@ -1,7 +1,7 @@
 /* global describe, it */
-const assert = require('assert')
+import assert from 'assert'
 
-const spake2js = require('../../../../src')
+import { spake2 as createSpake2 } from '../../../../src/index.js'
 
 describe('SPAKE2 (Ed25519)', function () {
   const suite = 'ED25519-SHA256-HKDF-SHA256-HMAC-SHA256'
@@ -13,7 +13,7 @@ describe('SPAKE2 (Ed25519)', function () {
   const serverIdentity = 'server'
 
   it('completes an authenticated key exchange', async function () {
-    const s = spake2js.spake2({ suite, mhf, kdf })
+    const s = createSpake2({ suite, mhf, kdf })
 
     const verifier = await s.computeVerifier(password, salt)
     const client = await s.startClient(clientIdentity, serverIdentity, password, salt)
@@ -35,7 +35,7 @@ describe('SPAKE2 (Ed25519)', function () {
   })
 
   it('fails when the client password is incorrect', async function () {
-    const s = spake2js.spake2({ suite, mhf, kdf })
+    const s = createSpake2({ suite, mhf, kdf })
 
     const verifier = await s.computeVerifier(password, salt)
     const client = await s.startClient(clientIdentity, serverIdentity, 'wrong_password', salt)
@@ -53,7 +53,7 @@ describe('SPAKE2 (Ed25519)', function () {
   })
 
   it('fails when identities do not match', async function () {
-    const s = spake2js.spake2({ suite, mhf, kdf })
+    const s = createSpake2({ suite, mhf, kdf })
 
     const verifier = await s.computeVerifier(password, salt)
     const client = await s.startClient(clientIdentity, serverIdentity, password, salt)

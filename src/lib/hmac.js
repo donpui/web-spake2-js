@@ -1,10 +1,11 @@
-const hashJs = require('hash.js')
-const { toBytes, bufferFrom } = require('./bytes.js')
+import hashJs from 'hash.js'
+import { toBytes, bufferFrom } from './bytes.js'
 
 let nodeCreateHmac
 try {
-  ({ createHmac: nodeCreateHmac } = require('crypto'))
-} catch (error) {
+  const cryptoModule = await import('crypto')
+  nodeCreateHmac = cryptoModule.createHmac
+} catch {
   nodeCreateHmac = undefined
 }
 
@@ -15,7 +16,7 @@ try {
  * @param {Buffer} secret The secret key to compute the hash.
  * @returns {Buffer} The key-hashed content.
  */
-function hmacSha256 (content, secret) {
+export function hmacSha256 (content, secret) {
   const data = toBytes(content)
   const key = toBytes(secret)
   if (nodeCreateHmac) {
@@ -31,7 +32,7 @@ function hmacSha256 (content, secret) {
  * @param {Buffer} secret The secret key to compute the hash.
  * @returns {Buffer} The key-hashed content.
  */
-function hmacSha512 (content, secret) {
+export function hmacSha512 (content, secret) {
   const data = toBytes(content)
   const key = toBytes(secret)
   if (nodeCreateHmac) {
@@ -39,6 +40,3 @@ function hmacSha512 (content, secret) {
   }
   return Uint8Array.from(hashJs.hmac(hashJs.sha512, key).update(data).digest())
 }
-
-exports.hmacSha256 = hmacSha256
-exports.hmacSha512 = hmacSha512

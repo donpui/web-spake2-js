@@ -1,8 +1,8 @@
 /* global describe, it */
-const assert = require('assert')
-const BN = require('bn.js')
+import assert from 'assert'
+import BN from 'bn.js'
 
-const { randomInteger } = require('../../../src/lib/random.js')
+import { randomInteger } from '../../../src/lib/random.js'
 
 describe('lib/random.js', function () {
   describe('randomInteger', function () {

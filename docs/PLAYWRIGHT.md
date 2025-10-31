@@ -17,7 +17,7 @@ The repository includes:
 - `playwright.config.js` – Playwright configuration pointing at `tests/browser`.
 - `tests/browser/setup.js` – Rollup bundling helper that produces `tests/browser/dist/bundle.js`.
 - `tests/browser/spake2-demo.js` – Browser entry script that executes an SPAKE2+ flow and exposes the shared key.
-- `tests/browser/spake2.spec.js` – Playwright test that bundles the code, launches `vite preview`, and asserts the shared key in Chromium.
+- `tests/browser/spake2.spec.js` – Playwright test that bundles the code and asserts the shared key in Chromium.
 
 Execute:
 
@@ -30,12 +30,12 @@ Add the following scripts to `package.json` if they are not present:
 ```json
 {
   "scripts": {
-    "test:browser": "node tests/browser/setup.js && npx vite preview & npx playwright test --config=playwright.config.js"
+    "test:browser": "node tests/browser/setup.js && npx playwright test --config=playwright.config.js"
   }
 }
 ```
 
-> The command above starts a preview server, runs the browser tests, and then stops the server. Adjust the script to match your tooling if you already have a preview/build pipeline.
+> The command above builds the browser bundle and then runs the Playwright test suite. Adjust the script to match your tooling if you already have a dedicated bundling step.
 
 ## Notes
 

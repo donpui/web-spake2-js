@@ -1,7 +1,7 @@
 /* global describe, it */
-const assert = require('assert')
+import assert from 'assert'
 
-const { CURVES, Elliptic } = require('../../../src/lib/elliptic.js')
+import { CURVES, Elliptic } from '../../../src/lib/elliptic.js'
 
 describe('lib/elliptic.js', function () {
   describe('Elliptic', function () {

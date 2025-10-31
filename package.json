@@ -2,6 +2,7 @@
   "name": "webeb-spake2-js",
   "version": "1.0.0",
   "description": "A Javascript package for SPAKE2 and SPAKE2+ for web",
+  "type": "module",
   "main": "src/index.js",
   "author": "Donatas Puidokas <donpui@gmail.com>",
   "repository": "git@github.com:donpui/web-spake2-js.git",
@@ -9,12 +10,14 @@
   "scripts": {
     "lint": "eslint src",
     "lint-fix": "eslint src --fix",
-    "test": "jest tests/unit --coverage --reporters default jest-stare",
-    "test:unit": "jest tests/unit --coverage --reporters default jest-stare",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js tests/unit --coverage --reporters default jest-stare",
+    "test:unit": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js tests/unit --coverage --reporters default jest-stare",
     "test:browser": "node tests/browser/setup.js && npx playwright test --config=playwright.config.js",
     "doc": "documentation build src/** -f html -o doc"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.38.0",
     "@playwright/test": "^1.56.1",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
@@ -25,6 +28,8 @@
     "documentation": "^14.0.3",
     "eslint": "^9.38.0",
     "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^17.23.1",
+    "eslint-plugin-promise": "^7.2.1",
     "jest": "^30.2.0",
     "jest-stare": "^2.4.1",
     "playwright": "^1.56.1",
@@ -36,12 +41,19 @@
   "dependencies": {
     "bn.js": "^5.0.0",
     "elliptic": "^6.5.0",
+    "hash.js": "^1.1.7",
     "futoin-hkdf": "^1.2.0",
     "scrypt-js": "^3.0.1"
-  }
-  ,
+  },
   "jest": {
-    "testPathIgnorePatterns": ["/node_modules/", "/tests/browser/"],
-    "testMatch": ["**/tests/unit/**/*.spec.js"]
+    "testEnvironment": "node",
+    "transform": {},
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/browser/"
+    ],
+    "testMatch": [
+      "**/tests/unit/**/*.spec.js"
+    ]
   }
 }

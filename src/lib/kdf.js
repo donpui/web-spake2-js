@@ -1,10 +1,11 @@
-const hashJs = require('hash.js')
-const { toBytes, bufferFrom, concatBytes } = require('./bytes.js')
+import hashJs from 'hash.js'
+import { toBytes, bufferFrom, concatBytes } from './bytes.js'
 
 let nodeHkdf
 try {
-  nodeHkdf = require('futoin-hkdf')
-} catch (error) {
+  const hkdfModule = await import('futoin-hkdf')
+  nodeHkdf = hkdfModule.default || hkdfModule
+} catch {
   nodeHkdf = undefined
 }
 
@@ -47,7 +48,7 @@ function hkdfExpand (hashCtor, hashLen, prk, info, length) {
  * @param {number} [length=32] The desired output length in bytes.
  * @returns {Buffer} The derived key.
  */
-function hkdfSha256 (salt, ikm, info, length = 32) {
+export function hkdfSha256 (salt, ikm, info, length = 32) {
   const normalizedSalt = normalizeInput(salt)
   const normalizedInfo = normalizeInput(info)
   const normalizedIkm = normalizeInput(ikm)
@@ -72,7 +73,7 @@ function hkdfSha256 (salt, ikm, info, length = 32) {
  * @param {number} [length=64] The desired output length in bytes.
  * @returns {Buffer} The derived key.
  */
-function hkdfSha512 (salt, ikm, info, length = 64) {
+export function hkdfSha512 (salt, ikm, info, length = 64) {
   const normalizedSalt = normalizeInput(salt)
   const normalizedInfo = normalizeInput(info)
   const normalizedIkm = normalizeInput(ikm)
@@ -87,6 +88,3 @@ function hkdfSha512 (salt, ikm, info, length = 64) {
   const prk = hkdfExtract(hashCtor, hashLen, normalizedIkm, normalizedSalt)
   return hkdfExpand(hashCtor, hashLen, prk, normalizedInfo, length)
 }
-
-exports.hkdfSha256 = hkdfSha256
-exports.hkdfSha512 = hkdfSha512
