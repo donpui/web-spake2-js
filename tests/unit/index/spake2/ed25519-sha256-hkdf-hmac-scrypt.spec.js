@@ -1,5 +1,5 @@
 /* global describe, it */
-import assert from 'assert'
+import assert from 'node:assert/strict'
 
 import { spake2 as createSpake2 } from '../../../../src/index.js'
 

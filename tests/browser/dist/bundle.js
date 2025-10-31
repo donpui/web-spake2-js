@@ -49837,7 +49837,7 @@ try {
     TextEncoderCtor = TextEncoderCtor || util.TextEncoder;
     TextDecoderCtor = TextDecoderCtor || util.TextDecoder;
   }
-} catch (error) {
+} catch {
   // util module not available (e.g. in browser) – ignore
 }
 
@@ -50057,7 +50057,7 @@ let nodeCreateHash;
 try {
   const cryptoModule = await Promise.resolve().then(function () { return index$1; });
   nodeCreateHash = cryptoModule.createHash;
-} catch (error) {
+} catch {
   nodeCreateHash = undefined;
 }
 
@@ -50095,7 +50095,7 @@ let nodeCreateHmac;
 try {
   const cryptoModule = await Promise.resolve().then(function () { return index$1; });
   nodeCreateHmac = cryptoModule.createHmac;
-} catch (error) {
+} catch {
   nodeCreateHmac = undefined;
 }
 
@@ -50326,7 +50326,7 @@ let nodeHkdf;
 try {
   const hkdfModule = await Promise.resolve().then(function () { return hkdf$1; });
   nodeHkdf = hkdfModule.default || hkdfModule;
-} catch (error) {
+} catch {
   nodeHkdf = undefined;
 }
 
@@ -51058,7 +51058,7 @@ const cipherSuites = {
 let nodeCrypto;
 try {
   nodeCrypto = await Promise.resolve().then(function () { return index$1; });
-} catch (error) {
+} catch {
   nodeCrypto = undefined;
 }
 

@@ -1,5 +1,5 @@
 /* global describe, it */
-import assert from 'assert'
+import assert from 'node:assert/strict'
 
 import { CURVES, Elliptic } from '../../../src/lib/elliptic.js'
 

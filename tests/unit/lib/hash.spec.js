@@ -1,5 +1,5 @@
 /* global describe, it */
-import assert from 'assert'
+import assert from 'node:assert/strict'
 import { Buffer } from 'buffer'
 
 import { sha256 } from '../../../src/lib/hash.js'

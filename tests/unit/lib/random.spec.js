@@ -1,5 +1,5 @@
 /* global describe, it */
-import assert from 'assert'
+import assert from 'node:assert/strict'
 import BN from 'bn.js'
 
 import { randomInteger } from '../../../src/lib/random.js'
