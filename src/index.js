@@ -557,12 +557,20 @@ class ClientSharedSecret {
   }
 
   toBuffer () {
+    return bufferFrom(this.hashTranscript)
+  }
+
+  toUint8Array () {
+    return this.hashTranscript.slice()
+  }
+
+  toKeBuffer () {
     const bytes = this.options.plus ? this.sharedKey : this.Ke
     return bufferFrom(bytes)
   }
 
-  toUint8Array () {
-    return this.options.plus ? this.sharedKey : this.Ke
+  getTranscriptHash () {
+    return this.hashTranscript.slice()
   }
 
   save () {
@@ -659,12 +667,20 @@ class ServerSharedSecret {
   }
 
   toBuffer () {
+    return bufferFrom(this.hashTranscript)
+  }
+
+  toUint8Array () {
+    return this.hashTranscript.slice()
+  }
+
+  toKeBuffer () {
     const bytes = this.options.plus ? this.sharedKey : this.Ke
     return bufferFrom(bytes)
   }
 
-  toUint8Array () {
-    return this.options.plus ? this.sharedKey : this.Ke
+  getTranscriptHash () {
+    return this.hashTranscript.slice()
   }
 
   save () {

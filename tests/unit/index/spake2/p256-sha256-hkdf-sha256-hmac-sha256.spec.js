@@ -74,7 +74,10 @@ describe('SPAKE2 (P-256 test vector)', function () {
     assert.strictEqual(toHex(confirmationServer), vector.confirmationServer)
     assert.doesNotThrow(() => sharedSecretClient.verify(confirmationServer))
 
-    assert.strictEqual(sharedSecretClient.toBuffer().toString('hex'), vector.sharedSecret)
+    // toBuffer() now returns the full hashTranscript instead of truncated Ke
+    assert.strictEqual(sharedSecretClient.toBuffer().toString('hex'), vector.hashTranscript)
     assert.deepStrictEqual(sharedSecretClient.toBuffer(), sharedSecretServer.toBuffer())
+    // toKeBuffer() returns the truncated Ke (old behavior)
+    assert.strictEqual(sharedSecretClient.toKeBuffer().toString('hex'), vector.sharedSecret)
   })
 })

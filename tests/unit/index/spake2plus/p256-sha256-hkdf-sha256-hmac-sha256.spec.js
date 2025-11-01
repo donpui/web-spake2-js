@@ -88,7 +88,10 @@ describe('SPAKE2+ (P-256 test vector)', function () {
     assert.strictEqual(toHex(confirmationServer), vector.confirmServer)
     assert.doesNotThrow(() => sharedSecretClient.verify(confirmationServer))
 
-    assert.strictEqual(sharedSecretClient.toBuffer().toString('hex'), vector.sharedKey)
+    // toBuffer() now returns the full hashTranscript instead of KDF-derived sharedKey
+    assert.strictEqual(sharedSecretClient.toBuffer().toString('hex'), vector.hashTranscript)
     assert.deepStrictEqual(sharedSecretClient.toBuffer(), sharedSecretServer.toBuffer())
+    // toKeBuffer() returns the KDF-derived sharedKey (old behavior)
+    assert.strictEqual(sharedSecretClient.toKeBuffer().toString('hex'), vector.sharedKey)
   })
 })
